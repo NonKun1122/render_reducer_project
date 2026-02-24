@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "render_reducer",
+  "version": "1.0.0",
+  "name": "Render Reducer",
+  "description": "Reduces block rendering and hides entities for performance.",
+  "authors": ["Manus"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/render_reducer/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.example.mod.RenderReducerModClient"
+    ]
+  },
+  "mixins": [
+    "render_reducer.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "minecraft": "~1.20.1",
+    "java": ">=17"
+  }
+}
