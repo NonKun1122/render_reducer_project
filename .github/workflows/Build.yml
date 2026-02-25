@@ -1,35 +1,34 @@
 name: Build Mod
 on:
   push:
-    branches: [ main, master ] # หรือ branch หลักอื่นๆ ของคุณ
+    branches: [ main, master ]
   pull_request:
-    branches: [ main, master ] # หรือ branch หลักอื่นๆ ของคุณ
+    branches: [ main, master ]
 
 jobs:
   build:
-    strategy:
-      matrix:
-        java: [17] # สามารถเพิ่มเวอร์ชัน Java อื่นๆ ได้หากต้องการ
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4 # อัปเกรดเป็น v4 เพื่อประสิทธิภาพและความปลอดภัยที่ดีขึ้น
+        uses: actions/checkout@v4
 
-      - name: Setup Java ${{ matrix.java }}
-        uses: actions/setup-java@v4 # อัปเกรดเป็น v4 เพื่อความเข้ากันได้และฟีเจอร์ใหม่ๆ
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: ${{ matrix.java }}
+          java-version: '17' # เปลี่ยนเป็น '21' หากใช้ MC 1.20.5+
+          cache: 'gradle'    # เพิ่มบรรทัดนี้เพื่อความเร็วในการ Build
 
       - name: Make Gradle Wrapper Executable
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        # ใช้ --stacktrace เพื่อให้เวลาพัง มันจะบอกสาเหตุละเอียดขึ้น
+        run: ./gradlew build --stacktrace 
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4 # แก้ไขเป็น v4 ตามที่ GitHub แนะนำ
+        if: success() # อัปโหลดเฉพาะเมื่อ Build ผ่านเท่านั้น
+        uses: actions/upload-artifact@v4
         with:
           name: RenderReducer-Mod
           path: build/libs/*.jar
-          # retention-days: 5 # (Optional) กำหนดจำนวนวันที่เก็บ Artifact หากไม่ระบุจะเก็บไว้ 90 วัน
