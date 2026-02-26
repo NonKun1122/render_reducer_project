@@ -14,9 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderer.class)
 public class EntityRenderMixin<T extends Entity> {
 
-    // เพิ่มตัวแปรสำหรับควบคุมการซ่อนเอนทิตีแต่ละประเภท
-    private static boolean hideHostileEntities = true;
-    private static boolean hidePassiveEntities = true;
+    // ทำให้ตัวแปรควบคุมการซ่อนเอนทิตีเป็น private static final เพื่อหลีกเลี่ยงปัญหา Mixin apply failed
+    // หากต้องการให้ปรับค่าได้ ควรใช้ระบบ Config ของ Fabric (เช่น Cloth Config API)
+    private static final boolean hideHostileEntities = true;
+    private static final boolean hidePassiveEntities = true;
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void onRender(
@@ -27,15 +28,5 @@ public class EntityRenderMixin<T extends Entity> {
             (hidePassiveEntities && entity instanceof PassiveEntity)) {
             ci.cancel();
         }
-    }
-
-    // เมธอดสำหรับตั้งค่าการซ่อน Hostile Entities
-    public static void setHideHostileEntities(boolean hide) {
-        hideHostileEntities = hide;
-    }
-
-    // เมธอดสำหรับตั้งค่าการซ่อน Passive Entities
-    public static void setHidePassiveEntities(boolean hide) {
-        hidePassiveEntities = hide;
     }
 }
