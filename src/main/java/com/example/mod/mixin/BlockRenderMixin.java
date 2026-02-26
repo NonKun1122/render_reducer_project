@@ -1,6 +1,8 @@
 package com.example.mod.mixin;
 
+import com.example.mod.Config;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.model.BakedModel;
@@ -17,10 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BlockRenderMixin {
     private final Random internalRandom = Random.create();
 
-    // ทำให้ renderReductionChance เป็น private static final เพื่อหลีกเลี่ยงปัญหา Mixin apply failed
-    // หากต้องการให้ปรับค่าได้ ควรใช้ระบบ Config ของ Fabric (เช่น Cloth Config API)
-    private static final float renderReductionChance = 0.5f; 
-
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void onRenderBlock(
         BlockRenderView world,
@@ -35,8 +33,22 @@ public class BlockRenderMixin {
         int overlay,
         CallbackInfo ci
     ) {
-        if (this.internalRandom.nextFloat() < renderReductionChance) {
-            ci.cancel();
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player != null) {
+            // ตรวจสอบระยะห่างระหว่างผู้เล่นกับบล็อก
+            double distanceSq = client.player.squaredDistanceTo(pos.getX(), pos.getY(), pos.getZ());
+            double maxDistanceSq = Config.renderDistance * Config.renderDistance;
+
+            // ถ้าไกลเกินระยะที่กำหนด ให้ยกเลิกการเรนเดอร์
+            if (distanceSq > maxDistanceSq) {
+                ci.cancel();
+                return;
+            }
+
+            // ใช้โอกาสในการลดการเรนเดอร์เพื่อเพิ่มความลื่นไหล (สำหรับบล็อกที่อยู่ในระยะ)
+            if (Config.renderReductionChance > 0 && this.internalRandom.nextFloat() < Config.renderReductionChance) {
+                ci.cancel();
+            }
         }
     }
 }
