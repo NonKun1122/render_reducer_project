@@ -22,20 +22,13 @@ repositories {
 }
 
 dependencies {
-    // ดึงเวอร์ชันจาก gradle.properties
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    /**
-     * แก้ไขปัญหาการ Build ใน GitHub Actions:
-     * ใช้ modCompileOnly และปิด transitive เพื่อป้องกันปัญหา Namespace intermediary
-     * วิธีนี้จะทำให้ Compile ผ่าน และไม่เกิด Error ตอน Remap Jar
-     */
-    modCompileOnly ("me.jellysquid.mods.sodium:sodium-fabric:0.5.13+mc1.20.1") {
-        transitive = false
-    }
+    // ใช้ compileOnly ธรรมดาเพื่อตัดปัญหาตอน Remap Jar
+    compileOnly "me.jellysquid.mods.sodium:sodium-fabric:0.5.13+mc1.20.1"
 }
 
 processResources {
@@ -58,23 +51,5 @@ java {
 jar {
     from("LICENSE") {
         rename { "${it}_${project.archives_base_name}"}
-    }
-}
-
-/**
- * เพิ่มเติมสำหรับการจัดการ Mixin และการรัน
- */
-loom {
-    // ป้องกันปัญหาการพยายาม Remap คลาสภายนอกที่ไม่รู้จัก
-    mixin {
-        defaultRefmapName = "${project.archives_base_name}.refmap.json"
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
     }
 }
