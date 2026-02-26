@@ -5,9 +5,9 @@
   "name": "Render Reducer",
   "description": "Reduces block rendering and hides entities for performance.",
   "authors": ["NonKungCh"],
-  "contact": [
+  "contact": {
     https://modrinth.com/user/NonKungCh
-  ],
+    },
   "license": "MIT",
   "icon": "assets/render_reducer/icon.png",
   "environment": "client",
