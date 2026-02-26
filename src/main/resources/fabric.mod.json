@@ -3,15 +3,20 @@
   "id": "render_reducer",
   "version": "1.0.0",
   "name": "Render Reducer",
-  "description": "Reduces block rendering and hides entities for performance.",
-  "authors": ["NonKungCh"],
-  "contact": {},
+  "description": "Reduces block rendering and hides entities for performance. Press 'O' to open settings.",
+  "authors": [
+    "NonKungCh"
+  ],
+  "contact": {
+    "homepage": "https://github.com/NonKun1122/render_reducer_project",
+    "sources": "https://github.com/NonKun1122/render_reducer_project"
+  },
   "license": "MIT",
   "icon": "assets/render_reducer/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.example.mod.RenderReducerModClient"
+      "com.example.mod.RenderReducerClient"
     ]
   },
   "mixins": [
