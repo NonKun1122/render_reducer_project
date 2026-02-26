@@ -15,22 +15,19 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import java.util.List;
 
-@Mixin(SodiumVideoOptionsScreen.class)
+@Mixin(value = SodiumVideoOptionsScreen.class, remap = false)
 public class SodiumVideoOptionsMixin {
-    @Shadow(remap = false)
+    @Shadow
     @Final
     private List<OptionPage> pages;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onInit(CallbackInfo ci) {
-        // สร้างกลุ่มตัวเลือกสำหรับ Render Reducer
         OptionGroup.Builder groupBuilder = OptionGroup.createBuilder();
         groupBuilder.setName(Text.literal("Render Reducer Settings"));
 
-        // 1. ระยะการเรนเดอร์ (Slider)
         groupBuilder.add(OptionImpl.createBuilder(Double.class, new MinecraftOptionsStorage())
                 .setName(Text.literal("Custom Render Distance"))
                 .setTooltip(Text.literal("Set the maximum distance for rendering blocks and entities."))
@@ -39,7 +36,6 @@ public class SodiumVideoOptionsMixin {
                             opt -> Config.renderDistance)
                 .build());
 
-        // 2. โอกาสในการลดการเรนเดอร์ (Slider %)
         groupBuilder.add(OptionImpl.createBuilder(Float.class, new MinecraftOptionsStorage())
                 .setName(Text.literal("Render Reduction Chance"))
                 .setTooltip(Text.literal("Chance to skip rendering a block to improve FPS."))
@@ -48,7 +44,6 @@ public class SodiumVideoOptionsMixin {
                             opt -> (float)(Config.renderReductionChance * 100))
                 .build());
 
-        // 3. เปิด/ปิด การซ่อนไอเทมบนพื้น (Checkbox)
         groupBuilder.add(OptionImpl.createBuilder(Boolean.class, new MinecraftOptionsStorage())
                 .setName(Text.literal("Reduce Dropped Items"))
                 .setTooltip(Text.literal("Hide items on the ground when far away."))
@@ -57,7 +52,6 @@ public class SodiumVideoOptionsMixin {
                             opt -> Config.reduceDroppedItemRendering)
                 .build());
 
-        // เพิ่มหน้าการตั้งค่าใหม่เข้าไปใน Sodium
         pages.add(new OptionPage(Text.literal("Render Reducer"), List.of(groupBuilder.build())));
     }
 }
