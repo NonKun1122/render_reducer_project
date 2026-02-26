@@ -7,7 +7,9 @@
   ],
   "client": [
     "EntityRenderMixin",
-    "BlockRenderMixin"
+    "BlockRenderMixin",
+    "ItemEntityMixin",
+    "SodiumVideoOptionsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
