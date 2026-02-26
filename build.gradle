@@ -12,25 +12,16 @@ base {
 
 repositories {
     mavenCentral()
-    maven {
-        name = "Modrinth"
-        url = "https://api.modrinth.com/maven"
-    }
-    maven {
-        url = "https://maven.fabricmc.net/"
-    }
+    maven { url = "https://maven.fabricmc.net/" }
 }
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    // เปลี่ยนจาก me.jellysquid... เป็น maven.modrinth และใช้ Slug 'sodium'
-    // และเปลี่ยนเวอร์ชันให้ตรงตามที่ Modrinth กำหนด
-    compileOnly "maven.modrinth:sodium:mc1.20.1-0.5.13-fabric"
 }
-    
+
 processResources {
     inputs.property "version", project.version
     filesMatching("fabric.mod.json") {
@@ -51,5 +42,13 @@ java {
 jar {
     from("LICENSE") {
         rename { "${it}_${project.archives_base_name}"}
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
     }
 }
