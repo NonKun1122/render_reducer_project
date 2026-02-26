@@ -1,7 +1,6 @@
 package com.example.mod.mixin;
 
 import com.example.mod.Config;
-import me.jellysquid.mods.sodium.client.gui.SodiumVideoOptionsScreen;
 import me.jellysquid.mods.sodium.client.gui.options.OptionGroup;
 import me.jellysquid.mods.sodium.client.gui.options.OptionImpl;
 import me.jellysquid.mods.sodium.client.gui.options.OptionPage;
@@ -15,9 +14,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import java.util.List;
 
-@Mixin(value = SodiumVideoOptionsScreen.class, remap = false)
+// ใช้ targets เป็น String เพื่อเลี่ยงปัญหา Namespace intermediary ใน GitHub Actions
+@Mixin(targets = "me.jellysquid.mods.sodium.client.gui.SodiumVideoOptionsScreen", remap = false)
 public class SodiumVideoOptionsMixin {
     @Shadow
     @Final
