@@ -23,6 +23,9 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // เพิ่มบรรทัดนี้ (ตรวจสอบเวอร์ชันให้ตรงกับที่คุณใช้)
+    modImplementation "me.jellysquid.mods.sodium:sodium-fabric:0.5.13+mc1.20.1"
 }
 
 processResources {
